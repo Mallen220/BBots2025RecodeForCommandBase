@@ -92,7 +92,7 @@ public class MecanumDriveSubsystem extends SubsystemBase {
   }
 
   public void driveRobotCentric(GamepadEx Controller) {
-    driveRobotCentric(Controller.getLeftY(), Controller.getLeftX(), Controller.getRightX());
+    driveRobotCentric(-Controller.getLeftY(), Controller.getLeftX(), Controller.getRightX());
   }
 
   public void driveRobotCentric(double forward, double strafe, double rotate) {
@@ -117,7 +117,7 @@ public class MecanumDriveSubsystem extends SubsystemBase {
   }
 
   public void driveFieldCentric(GamepadEx Controller) {
-    driveFieldCentric(Controller.getLeftY(), Controller.getLeftX(), Controller.getRightX());
+    driveFieldCentric(-Controller.getLeftY(), Controller.getLeftX(), Controller.getRightX());
   }
 
   public void driveFieldCentric(double forward, double strafe, double rotate) {
