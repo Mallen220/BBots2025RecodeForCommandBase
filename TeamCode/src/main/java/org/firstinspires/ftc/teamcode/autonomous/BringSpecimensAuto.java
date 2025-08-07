@@ -12,11 +12,11 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Subsystems.HomingSensor;
 import org.firstinspires.ftc.teamcode.Subsystems.HorizontalExtension;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
-import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 
 public class BringSpecimensAuto extends SequentialCommandGroup {
   public BringSpecimensAuto(
-      MecanumDriveSubsystem drive,
+      Drivetrain drive,
       Intake intake,
       HorizontalExtension horizontal,
       HomingSensor homingSensor) {

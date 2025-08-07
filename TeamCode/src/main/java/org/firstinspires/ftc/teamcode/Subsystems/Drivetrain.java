@@ -8,7 +8,7 @@ import com.seattlesolvers.solverslib.hardware.RevIMU;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import org.firstinspires.ftc.teamcode.Constants;
 
-public class MecanumDriveSubsystem extends SubsystemBase {
+public class Drivetrain extends SubsystemBase {
   // Declare our motors
   private final Motor frontLeftMotor;
   private final Motor backLeftMotor;
@@ -24,7 +24,7 @@ public class MecanumDriveSubsystem extends SubsystemBase {
   private MecanumDrive drive = null;
 
   // Make sure your ID's match your configuration
-  public MecanumDriveSubsystem(final HardwareMap hwMap) {
+  public Drivetrain(final HardwareMap hwMap) {
     this.hwMap = hwMap;
 
     frontLeftMotor = new Motor(hwMap, Constants.DriveConstants.FRONT_LEFT_MOTOR_ID);

@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.Commands.ToggleOuttakeClawCommand;
 import org.firstinspires.ftc.teamcode.Subsystems.HomingSensor;
 import org.firstinspires.ftc.teamcode.Subsystems.HorizontalExtension;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
-import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Subsystems.OuttakeArm;
 import org.firstinspires.ftc.teamcode.Subsystems.VerticalArm;
@@ -36,7 +36,7 @@ public class RobotContainer {
   private VerticalArm verticalArm;
   private Outtake outtake;
   private OuttakeArm outtakeArm;
-  private MecanumDriveSubsystem drive;
+  private Drivetrain drive;
   private HorizontalExtension horizontal;
   private Intake intake;
   private HomingSensor homingSensor;
@@ -85,7 +85,7 @@ public class RobotContainer {
     verticalArm = new VerticalArm(hardwareMap);
     outtake = new Outtake(hardwareMap);
     outtakeArm = new OuttakeArm(hardwareMap);
-    drive = new MecanumDriveSubsystem(hardwareMap);
+    drive = new Drivetrain(hardwareMap);
     horizontal = new HorizontalExtension(hardwareMap);
     intake = new Intake(hardwareMap);
     homingSensor = new HomingSensor(hardwareMap);

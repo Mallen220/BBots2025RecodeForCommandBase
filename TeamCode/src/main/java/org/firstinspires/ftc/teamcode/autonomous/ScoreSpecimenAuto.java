@@ -15,14 +15,14 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Subsystems.HomingSensor;
 import org.firstinspires.ftc.teamcode.Subsystems.HorizontalExtension;
 import org.firstinspires.ftc.teamcode.Subsystems.Intake;
-import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Subsystems.OuttakeArm;
 import org.firstinspires.ftc.teamcode.Subsystems.VerticalArm;
 
 public class ScoreSpecimenAuto extends SequentialCommandGroup {
   public ScoreSpecimenAuto(
-      MecanumDriveSubsystem drive,
+      Drivetrain drive,
       Intake intake,
       Outtake outtake,
       OuttakeArm outtakeArm,

@@ -5,14 +5,14 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import org.firstinspires.ftc.teamcode.Commands.AutoCommands.DriveBackward;
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.Subsystems.OuttakeArm;
 import org.firstinspires.ftc.teamcode.Subsystems.VerticalArm;
 
 public class AutonomousScoreSpecimen extends SequentialCommandGroup {
   public AutonomousScoreSpecimen(
-      MecanumDriveSubsystem drive,
+      Drivetrain drive,
       OuttakeArm outtakeArm,
       Outtake outtake,
       VerticalArm verticalArm,

@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode.Commands;
 
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.Subsystem;
-import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 
 public class ResetHeading extends SequentialCommandGroup {
-  private final MecanumDriveSubsystem drive;
+  private final Drivetrain drive;
 
-  public ResetHeading(MecanumDriveSubsystem drive) {
+  public ResetHeading(Drivetrain drive) {
     this.drive = drive;
     addRequirements((Subsystem) drive);
   }

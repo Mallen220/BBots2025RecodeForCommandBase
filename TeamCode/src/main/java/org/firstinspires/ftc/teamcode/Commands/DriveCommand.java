@@ -3,16 +3,16 @@ package org.firstinspires.ftc.teamcode.Commands;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.Subsystem;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
-import org.firstinspires.ftc.teamcode.Subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Utils;
 
 public class DriveCommand extends CommandBase {
-  private final MecanumDriveSubsystem drive;
+  private final Drivetrain drive;
   private final GamepadEx gamepad;
 
   private final double tolerance = 0.1; // Tolerance for joystick input
 
-  public DriveCommand(MecanumDriveSubsystem drive, GamepadEx gamepad) {
+  public DriveCommand(Drivetrain drive, GamepadEx gamepad) {
     this.drive = drive;
     this.gamepad = gamepad;
     addRequirements((Subsystem) drive);
