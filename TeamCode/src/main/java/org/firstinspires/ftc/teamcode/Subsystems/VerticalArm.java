@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
+import com.seattlesolvers.solverslib.controller.PIDController;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Constants.*;
 
@@ -10,105 +11,106 @@ public class VerticalArm extends SubsystemBase {
 
   private final DcMotor leftArm;
   private final DcMotor rightArm;
+  private final PIDController pidController;
   private ArmPosition goalPosition;
+  private boolean isPidActive = false;
 
   public VerticalArm(final HardwareMap hwMap) {
     leftArm = hwMap.dcMotor.get(Constants.ArmConstants.LEFT_ARM_ID);
     rightArm = hwMap.dcMotor.get(Constants.ArmConstants.RIGHT_ARM_ID);
 
-    // leftArm.setDirection(DcMotor.Direction.REVERSE);
+    leftArm.setDirection(DcMotor.Direction.REVERSE);
 
     leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     resetEncoders();
-    setRunMode(DcMotor.RunMode.RUN_USING_ENCODER);
-  }
+//    setRunWithoutEncoder();
 
-  private void setRunMode(final DcMotor.RunMode mode) {
-    leftArm.setMode(mode);
-    rightArm.setMode(mode);
+    // Initialize PID controller with gains from constants
+    pidController =
+        new PIDController(ArmConstants.ARM_KP, ArmConstants.ARM_KI, ArmConstants.ARM_KD);
+    pidController.setTolerance(ArmConstants.PID_TOLERANCE);
   }
 
   private void resetEncoders() {
-    setRunMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//    setRunWithoutEncoder();
+  }
+
+  private void setRunWithoutEncoder() {
+    leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
   }
 
   public void goToPosition(final ArmPosition position) {
     goalPosition = position;
-    final int targetPosition = position.encoderTicks;
-
-    if (targetPosition < ArmConstants.VERTICAL_MIN_POSITION
-        || targetPosition > ArmConstants.VERTICAL_MAX_POSITION) {
-      stop();
-    }
-
-    if (getCurrentPosition()[1] < ArmConstants.VERTICAL_MIN_POSITION
-        || getCurrentPosition()[1] > ArmConstants.VERTICAL_MAX_POSITION) {
-      stop();
-    } else if (getCurrentPosition()[0] < ArmConstants.VERTICAL_MIN_POSITION
-        || getCurrentPosition()[0] > ArmConstants.VERTICAL_MAX_POSITION) {
-      stop();
-    }
-
-    if (Math.abs(leftArm.getCurrentPosition() - rightArm.getCurrentPosition())
-        > ArmConstants.MAX_ALLOWED_DIFFERENCE) {
-      final double leftDistance = Math.abs(getCurrentPosition()[0] - targetPosition);
-      final double rightDistance = Math.abs(getCurrentPosition()[1] - targetPosition);
-
-      //      if (leftDistance >= rightDistance) {
-      //        rightArm.setPower(0);
-      //      } else {
-      //        leftArm.setPower(0);
-      //      }
-    }
-
-    leftArm.setTargetPosition(targetPosition);
-    rightArm.setTargetPosition(targetPosition);
-
-    setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
-    leftArm.setPower(ArmConstants.VERTICAL_MOVE_POWER);
-    rightArm.setPower(ArmConstants.VERTICAL_MOVE_POWER);
-
-    //    leftArm.setPower(ArmConstants.VERTICAL_MOVE_POWER);
-    //    rightArm.setPower(ArmConstants.VERTICAL_MOVE_POWER);
+    pidController.setSetPoint(position.encoderTicks);
+    pidController.reset(); // Clear accumulated error
+    isPidActive = true;
   }
 
-  public ArmPosition getGoalPosition() {
-    return goalPosition;
+  public void stop() {
+    isPidActive = false;
+    leftArm.setPower(0);
+    rightArm.setPower(0);
   }
 
-  /***
-   * Returns an array with the  absolute value of the leftArm and the rightArm
-   * @return
-   */
+  @Override
+  public void periodic() {
+    if (isPidActive) {
+      double currentPosition = getPosition();
+
+      // Safety checks
+      if (isOutOfBounds() || isMotorDifferenceExceeded()) {
+        stop();
+        return;
+      }
+
+      // Calculate PID output and apply to motors
+      double power = pidController.calculate(currentPosition);
+      setArmPowers(power);
+
+      // Stop PID when target is reached
+      if (pidController.atSetPoint()) {
+        stop();
+      }
+    }
+  }
+
+  private double getPosition() { // Returns average position of both arms, should be about the same.
+    double[] positions = getCurrentPosition();
+    return (positions[0] + positions[1]) / 2.0;
+  }
+
+  private boolean isOutOfBounds() {
+    double[] positions = getCurrentPosition();
+    return (positions[0] < ArmConstants.VERTICAL_MIN_POSITION
+        || positions[0] > ArmConstants.VERTICAL_MAX_POSITION
+        || positions[1] < ArmConstants.VERTICAL_MIN_POSITION
+        || positions[1] > ArmConstants.VERTICAL_MAX_POSITION);
+  }
+
+  private boolean isMotorDifferenceExceeded() {
+    double[] positions = getCurrentPosition();
+    return Math.abs(positions[0] - positions[1]) > ArmConstants.MAX_ALLOWED_DIFFERENCE;
+  }
+
   public double[] getCurrentPosition() {
     return new double[] {
       Math.abs(leftArm.getCurrentPosition()), Math.abs(rightArm.getCurrentPosition())
     };
   }
 
-  public double[] getArmPowers() {
-    return new double[] {leftArm.getPower(), rightArm.getPower()};
-  }
-
-  public void setModeRunWithoutEncoder() {
-    leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-  }
-
-  public void setModeRunWithEncoder() {
-    leftArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    rightArm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+  public ArmPosition getGoalPosition() {
+    return goalPosition;
   }
 
   public void setArmPowers(final double power) {
+    // Disable PID when manually setting power
+    isPidActive = false;
     leftArm.setPower(power);
     rightArm.setPower(power);
-  }
-
-  public void stop() {
-    leftArm.setPower(0);
-    rightArm.setPower(0);
   }
 }

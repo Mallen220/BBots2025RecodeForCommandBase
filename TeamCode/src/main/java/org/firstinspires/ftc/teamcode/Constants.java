@@ -19,6 +19,12 @@ public class Constants {
     public static final int MAX_ALLOWED_DIFFERENCE = 50;
 
     public static final double ARM_BELT_LENGTH = 54; // in
+
+    // Example values - tune these for your arm
+    public static final double ARM_KP = 0.025;
+    public static final double ARM_KI = 0.001;
+    public static final double ARM_KD = 0.005;
+    public static final double PID_TOLERANCE = 10;
   }
 
   public enum ArmPosition {
