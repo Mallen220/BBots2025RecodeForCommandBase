@@ -18,7 +18,9 @@ public class ManualArmCommand extends CommandBase {
   }
 
   public void initialize() {
-    arm.setModeRunWithoutEncoder();
+    // Since the arm subsystem is set to encoder control, we don't need to do anything here.
+    // This command is technically logically flawed but serves as a demo so is ok. This is for
+    // manual control of the arm using the gamepad.
   }
 
   @Override
