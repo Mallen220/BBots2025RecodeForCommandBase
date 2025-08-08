@@ -110,7 +110,7 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  public void configureAuto() {
+  public void configureAuto() { //Note that I'm still working on this. It does not work yet.
     currentGameMode = gameMode.Auto;
     initializeSubsystems();
     startAutoChooser();
@@ -149,12 +149,12 @@ public class RobotContainer {
             new OuttakeArmToPosition(outtakeArm, Constants.OuttakeArmPosition.PICKUP_POSITION));
   }
 
-  public void startAutoChooser() {
+  public void startAutoChooser() { //Note that I'm still working on this. It does not work yet.
     AutoMode selectedMode = new AutoChooser(this, gamepad1, telemetry).getSelectedMode();
     scheduleAutoCommands(selectedMode);
   }
 
-  public void scheduleAutoCommands(AutoMode selectedAutoMode) {
+  public void scheduleAutoCommands(AutoMode selectedAutoMode) { //Note that I'm still working on this. It does not work yet.
     new WaitUntilCommand(JavaBot::isStarted);
     if (selectedAutoMode
         == AutoMode.BringSpecimensAuto) { // The switches we need here are not supported

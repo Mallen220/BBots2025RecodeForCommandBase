@@ -21,14 +21,14 @@ public class AutoChooser extends CommandBase {
 
   private final RobotContainer robotContainer;
 
-  public AutoChooser(RobotContainer robotContainer, GamepadEx gamepad, Telemetry telemetry) {
+  public AutoChooser(RobotContainer robotContainer, GamepadEx gamepad, Telemetry telemetry) { //Note that I'm still working on this. It does not work yet.
     this.robotContainer = robotContainer;
     this.gamepad = gamepad;
     this.telemetry = telemetry;
   }
 
   @Override
-  public void execute() {
+  public void execute() { //Note that I'm still working on this. It does not work yet.
     if (gamepad.isDown(GamepadKeys.Button.DPAD_RIGHT)) {
       selectedIndex = (selectedIndex + 1) % modes.length;
       new WaitCommand(300).schedule();
