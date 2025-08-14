@@ -4,25 +4,27 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDController;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
+
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.Constants.*;
 
 public class VerticalArm extends SubsystemBase {
 
-  private final DcMotor leftArm;
-  private final DcMotor rightArm;
+  private final MotorEx leftArm;
+  private final MotorEx rightArm;
   private final PIDController pidController;
   private ArmPosition goalPosition;
   private boolean isPidActive = false;
 
   public VerticalArm(final HardwareMap hwMap) {
-    leftArm = hwMap.dcMotor.get(Constants.ArmConstants.LEFT_ARM_ID);
-    rightArm = hwMap.dcMotor.get(Constants.ArmConstants.RIGHT_ARM_ID);
+    leftArm = new MotorEx(hwMap, Constants.ArmConstants.LEFT_ARM_ID);
+    rightArm = new MotorEx(hwMap, Constants.ArmConstants.RIGHT_ARM_ID);
+    leftArm.setInverted(true);
 
-    leftArm.setDirection(DcMotor.Direction.REVERSE);
-
-    leftArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    rightArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    leftArm.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+    rightArm.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
     resetEncoders();
 //    setRunWithoutEncoder();
@@ -34,14 +36,14 @@ public class VerticalArm extends SubsystemBase {
   }
 
   private void resetEncoders() {
-    leftArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    rightArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    leftArm.stopAndResetEncoder();
+    rightArm.stopAndResetEncoder();
 //    setRunWithoutEncoder();
   }
 
   private void setRunWithoutEncoder() {
-    leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    rightArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    leftArm.setRunMode(Motor.RunMode.RawPower);
+    rightArm.setRunMode(Motor.RunMode.RawPower);;
   }
 
   public void goToPosition(final ArmPosition position) {
@@ -53,8 +55,8 @@ public class VerticalArm extends SubsystemBase {
 
   public void stop() {
     isPidActive = false;
-    leftArm.setPower(0);
-    rightArm.setPower(0);
+    leftArm.stopMotor();
+    rightArm.stopMotor();;
   }
 
   @Override
@@ -110,7 +112,7 @@ public class VerticalArm extends SubsystemBase {
   public void setArmPowers(final double power) {
     // Disable PID when manually setting power
     isPidActive = false;
-    leftArm.setPower(power);
-    rightArm.setPower(power);
+    leftArm.set(power);
+    rightArm.set(power);
   }
 }

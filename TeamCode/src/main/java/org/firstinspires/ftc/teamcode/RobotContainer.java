@@ -119,7 +119,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Gamepad 1 buttons
     new GamepadButton(gamepad1, GamepadKeys.Button.Y)
-        .whenPressed(
+          .whenPressed(
             new IntakeGoToFlipPosition(intake, Constants.IntakePosition.FLIP_TRANSFER_POSITION));
     new GamepadButton(gamepad1, GamepadKeys.Button.A)
         .whenPressed(
